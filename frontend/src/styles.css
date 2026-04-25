@@ -326,6 +326,24 @@ button {
     background 180ms ease;
 }
 
+.field select {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 16px;
+  border: 1px solid rgba(112, 155, 196, 0.28);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--text-main);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+  font: inherit;
+  cursor: pointer;
+}
+
 .field input::placeholder {
   color: #87a0b8;
 }
@@ -335,6 +353,19 @@ button {
 }
 
 .field input:focus {
+  outline: none;
+  transform: translateY(-1px);
+  border-color: rgba(25, 118, 210, 0.45);
+  box-shadow:
+    0 0 0 4px rgba(25, 118, 210, 0.12),
+    0 10px 24px rgba(88, 143, 190, 0.12);
+}
+
+.field select:hover {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.field select:focus {
   outline: none;
   transform: translateY(-1px);
   border-color: rgba(25, 118, 210, 0.45);

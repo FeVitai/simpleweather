@@ -91,7 +91,7 @@ function App() {
           latitude: selectedLocation.latitude,
           longitude: selectedLocation.longitude,
           date: form.date,
-          time: form.time || null,
+          time: form.time ? `${form.time}:00` : null,
         }),
       });
 
@@ -124,30 +124,6 @@ function App() {
       setForm((currentForm) => ({
         ...currentForm,
         cityQuery: value,
-      }));
-      return;
-    }
-
-    if (name === 'time') {
-      const digitsOnly = value.replace(/\D/g, '').slice(0, 4);
-      let hours = digitsOnly.slice(0, 2);
-      let minutes = digitsOnly.slice(2, 4);
-
-      if (hours.length === 2 && Number(hours) > 23) {
-        hours = '23';
-      }
-
-      if (minutes.length === 2 && Number(minutes) > 59) {
-        minutes = '59';
-      }
-
-      const formattedTime = minutes
-        ? `${hours}:${minutes}`
-        : hours;
-
-      setForm((currentForm) => ({
-        ...currentForm,
-        time: formattedTime,
       }));
       return;
     }
@@ -192,7 +168,7 @@ function App() {
             const city = data.city || data.locality;
             if (city) {
               locationName = city;
-              locationDisplayName = data.principalSubdivision 
+              locationDisplayName = data.principalSubdivision
                 ? `${city}, ${data.principalSubdivision}`
                 : city;
             }
@@ -249,11 +225,7 @@ function App() {
 
           <div className="hero-copy reveal reveal-delay-1">
             <span className="eyebrow">Previsao do tempo</span>
-            <h1>Um clima premium no seu bolso, com respostas rapidas e visual refinado.</h1>
-            <p>
-              Busque cidades direto na API, escolha uma opcao da lista ou use a localizacao
-              atual do equipamento para ver temperatura, condicao do tempo e chance de chuva.
-            </p>
+            <h1>Um clima premium no seu bolso.</h1>
           </div>
 
           <form className="weather-form reveal reveal-delay-3" onSubmit={handleSubmit}>
@@ -325,25 +297,28 @@ function App() {
                 <input type="date" name="date" value={form.date} onChange={handleChange} required />
               </label>
 
-              <label className="field">
-                <span>Hora</span>
-                <input
-                  type="text"
-                  name="time"
-                  value={form.time}
-                  onChange={handleChange}
-                  maxLength={5}
-                  placeholder="HH:mm"
-                  inputMode="numeric"
-                  pattern="^([01]\d|2[0-3]):[0-5]\d$"
-                  title="Informe a hora no formato 24 horas (HH:mm), por exemplo 14:30."
-                />
-              </label>
+               <label className="field">
+                 <span>Hora</span>
+                 <select
+                   name="time"
+                   value={form.time}
+                   onChange={handleChange}
+                 >
+                   <option value="">-- Selecione uma hora --</option>
+                   {Array.from({ length: 24 }, (_, i) =>
+                     String(i).padStart(2, '0')
+                   ).map((hour) => (
+                     <option key={hour} value={hour}>
+                       {hour}:00
+                     </option>
+                   ))}
+                 </select>
+               </label>
             </div>
 
             <div className="form-footer">
               <p className="helper-text">
-                Escolha uma cidade da lista ou use sua localizacao. Se a hora ficar vazia,
+                Escolha uma cidade da lista ou use sua localizacao. Se nenhuma hora for selecionada,
                 a consulta sera feita para 12:00.
               </p>
               <button className="submit-button" type="submit" disabled={isSubmitDisabled}>
